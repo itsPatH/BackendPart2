@@ -4,27 +4,36 @@ import bcrypt from "bcrypt";
 import AuthService from "../services/AuthService.js";
 
 const sessionsRouter = Router();
-const JWT_SECRET = 'Katys Secret'; // Usa una variable de entorno en producción
+const JWT_SECRET = process.env.JWT_SECRET || 'Katys Secret';
 
-// Registro de usuario
-sessionsRouter.post('/register', async (req, res) => {
+const errorHandler = (err, req, res, next) => {
+    console.error(err);
+    res.status(err.status || 500).send({ status: "error", message: err.message || "Internal Server Error" });
+};
+
+const validateUserInput = (req, res, next) => {
+    const { firstName, lastName, email, password } = req.body;
+    if (!firstName || !lastName || !email || !password) {
+        return res.status(400).send({ status: "error", error: "All fields are required." });
+    }
+    next();
+};
+
+sessionsRouter.post('/register', validateUserInput, async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await AuthService.registerUser({ firstName, lastName, email, password: hashedPassword });
-
+        const newUser = await AuthService.registerUser({ firstName, lastName, email: email.toLowerCase(), password: hashedPassword }); // Asegúrate de que el email esté en minúsculas
         res.status(201).send({ status: "success", message: "Registered successfully", user: newUser });
     } catch (error) {
-        console.error("Registration error:", error);
-        res.status(400).send({ status: "error", error: error.message });
+        next(error);
     }
 });
 
-// Inicio de sesión
-sessionsRouter.post('/login', async (req, res) => {
+sessionsRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
     try {
-        const user = await AuthService.loginUser(email);
+        const user = await AuthService.loginUser(email.toLowerCase()); // Asegúrate de que el email esté en minúsculas
         if (!user) {
             return res.status(401).send({ status: "error", error: "Invalid credentials" });
         }
@@ -41,15 +50,13 @@ sessionsRouter.post('/login', async (req, res) => {
         };
 
         const userToken = jwt.sign(userSession, JWT_SECRET, { expiresIn: "1d" });
-        res.cookie('Katys Token', userToken, { httpOnly: true });
+        res.cookie('Katys Token', userToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' }); // Asegúrate de usar la opción 'secure' en producción
         res.send({ status: "success", message: "Login was successful", token: userToken });
     } catch (error) {
-        console.error("Login error:", error);
-        res.status(401).send({ status: "error", error: error.message });
+        next(error); 
     }
 });
 
-// Middleware para verificar el token
 const authenticateJWT = (req, res, next) => {
     const token = req.cookies['Katys Token'];
 
@@ -66,15 +73,15 @@ const authenticateJWT = (req, res, next) => {
     }
 };
 
-// Ruta para obtener el usuario actual
 sessionsRouter.get('/current', authenticateJWT, (req, res) => {
-    res.send(req.user);
+    res.send({ status: "success", user: req.user });
 });
 
-// Ruta de cierre de sesión
 sessionsRouter.get('/logout', (req, res) => {
     res.clearCookie('Katys Token');
     res.send({ status: "success", message: "Logged out successfully" });
 });
+
+sessionsRouter.use(errorHandler);
 
 export default sessionsRouter;
