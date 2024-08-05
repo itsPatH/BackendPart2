@@ -3,7 +3,7 @@ import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-import AuthService from './services/AuthService.js';
+import cookieParser from 'cookie-parser';
 
 import __dirname from './utils.js';
 import viewsRouter from './routes/views.router.js';
@@ -12,12 +12,9 @@ import cookiesRouter from './routes/cookies.router.js';
 import sessionRouter from './routes/session.router.js';
 
 const app = express();
-
 const PORT = process.env.PORT || 8080;
 
-const server = app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
-
-
+// Conectar a la base de datos
 mongoose.connect(
   'mongodb+srv://herrerapatriciadg:Gu4r1p0l0@clustersaurio.kjwdhw2.mongodb.net/KP?retryWrites=true&w=majority&appName=ClusterSaurio'
 ).then(() => {
@@ -26,42 +23,31 @@ mongoose.connect(
   console.error(`Mongoose connection error: ${err}`);
 });
 
+// Configuración de Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
 
+// Middlewares
 app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // Middleware para manejar cookies
 
-app.use(session({
-  secret:"nobodys gonna know!",
-  resave:false,
-  saveUninitialized:false,
-  store: MongoStore.create({
-    mongoUrl: 'mongodb+srv://herrerapatriciadg:Gu4r1p0l0@clustersaurio.kjwdhw2.mongodb.net/KP?retryWrites=true&w=majority&appName=ClusterSaurio',
-    ttl:60
-  })
-  }
-));
-
+// Rutas
 app.use('/', viewsRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/cookies', cookiesRouter);
 
-app.use((req, res, next) => {
-  console.log("Processing new middleware");
-  next();
-});
+// Rutas adicionales
 app.get('/', (req, res) => {
   res.render('home');
 });
 
-app.post('/', (req, res) => {
-  console.log(req.body);
-  res.send("OK");
-});
+const server = app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+
+
 
 /*app.get('/login', (req,res)=>{
   const loginUser = {

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6">Profile</h2>
+    <div>
+      <p><strong>ID:</strong> {{user.id}}</p>
+      <p><strong>Username:</strong> {{user.username}}</p>
+      <p><strong>Email:</strong> {{#if user.emails}}{{user.emails.[0].value}}{{else}}No email provided{{/if}}</p>
+      <p><strong>Profile URL:</strong> <a href="{{user.profileUrl}}" class="text-blue-500">{{user.profileUrl}}</a></p>
+    </div>
+    <a href="/api/sessions/logout" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 mt-4 inline-block">Logout</a>
+  </div>
+</body>
+</html>

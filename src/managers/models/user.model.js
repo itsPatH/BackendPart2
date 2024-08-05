@@ -28,7 +28,7 @@ const schema = new mongoose.Schema ({
     },
     password: {
         type: String,
-        required: true
+        //required: true
     },
     bankAccount: String,
     cards: [cardSubSchema]   
