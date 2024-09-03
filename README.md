@@ -34,8 +34,8 @@ Este es el backend de una aplicación de venta de discos de vinilo que maneja us
 ## Instalación
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
-   cd tu-repositorio
+   git clone https://github.com/itsPatH/BackendPart2.git
+   cd BackendPart2
 
 2. **Instalar dependencias:**
    ```bash
