@@ -1,6 +1,5 @@
 import { config as dotenvConfig } from 'dotenv';
 
-// Cargar las variables de entorno desde el archivo .env
 dotenvConfig();
 
 export default {
@@ -13,6 +12,6 @@ export default {
     },
   },
   server: {
-    PORT: process.env.PORT || 8080, // Valor por defecto si PORT no está definido
+    PORT: process.env.PORT || 8080,
   },
 };
