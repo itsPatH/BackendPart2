@@ -1,5 +1,5 @@
 import UsersManager from "./UsersManager.js";
-import ProductManager from "./"
+import ProductManager from "./ProductManager.js"
 
 
 export const usersService = new UsersManager();
