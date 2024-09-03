@@ -1,4 +1,4 @@
-import UserDao from '../db/dao/UserDao.js';
+import UserDao from '../db/DAO/userDao.js';
 import UserDTOSession from '../dto/user/UserDTOSession.js';
 
 const usersDAO = new UserDao();

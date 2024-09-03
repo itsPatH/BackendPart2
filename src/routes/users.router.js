@@ -15,7 +15,6 @@ router.post('/',async(req,res)=>{
     if(!firstName||!lastName||!email){
         res.status(400).send({status:"error",error:"Incomplete values"});
     }
-    //Creamos el newUser
     const newUser = {
         firstName,
         lastName,

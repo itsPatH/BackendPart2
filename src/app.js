@@ -2,7 +2,7 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
-import config from './config/config.js'; // Verifica si esta línea está correcta
+import config from './config/config.js'
 import __dirname from './utils.js';
 import viewsRouter from './routes/views.router.js';
 import usersRouter from './routes/users.router.js';
@@ -35,7 +35,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/cookies', cookiesRouter);
 
 app.get('/', (req, res) => {
-    res.render('home'); // Asegúrate de que esta vista exista
+    res.render('home');
 });
 
 const server = app.listen(config.server.PORT, () => console.log(`Listening on PORT ${config.server.PORT}`));
