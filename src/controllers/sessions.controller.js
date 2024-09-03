@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
-import UserDTOSession from "../dto/DTOSession";
+import UserDTOSession from "../DTO/DTOSession.js";
 
 const register = async (req, res) => {
   try {

@@ -1,11 +1,9 @@
 import { Router } from "express";
 import sessionsController from "../controllers/sessions.controller.js";
-import { Validator } from "../middlewares/credentialsValidator.js";
+import { Validator } from "../middlewares/credentialsValidation.js";
 
 const router = Router();
 
-// Ruta para registrar un nuevo usuario
-// Se utiliza POST para crear un nuevo registro de usuario
 router.post('/register', async (req, res) => {
     try {
         await sessionsController.register(req, res);
@@ -14,8 +12,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Ruta para iniciar sesión
-// Se utiliza POST para autenticar al usuario
 router.post('/login', async (req, res) => {
     try {
         await sessionsController.login(req, res);
@@ -24,8 +20,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Ruta para cerrar sesión
-// Se utiliza POST para cerrar la sesión del usuario
 router.post('/logout', async (req, res) => {
     try {
         await sessionsController.logout(req, res);
@@ -34,8 +28,6 @@ router.post('/logout', async (req, res) => {
     }
 });
 
-// Ruta para obtener información del usuario actual
-// Se utiliza GET, pero puede ser necesaria una validación previa mediante middleware
 router.get('/current', Validator(['user', 'admin'], 'Get Current User'), async (req, res) => {
     try {
         await sessionsController.current(req, res);
