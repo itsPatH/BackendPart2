@@ -1,4 +1,4 @@
-import User from '../managers/models/user.model.js'; // Asegúrate de que la ruta sea correcta
+import User from '../managers/models/user.model.js';
 import bcrypt from 'bcrypt';
 
 class AuthService {

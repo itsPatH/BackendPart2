@@ -1,6 +1,18 @@
-const config = {
-    MONGODB_URI: 'mongodb+srv://herrerapatriciadg:Gu4r1p0l0@clustersaurio.kjwdhw2.mongodb.net/KP?retryWrites=true&w=majority&appName=ClusterSaurio',
-    PORT: 8080,
-    JWT_SECRET: 'Katys Secret'}
-    
-export default config;
+import { config as dotenvConfig } from 'dotenv';
+
+// Cargar las variables de entorno desde el archivo .env
+dotenvConfig();
+
+export default {
+  app: {
+    MONGO: {
+      URL: process.env.MONGO_URL,
+    },
+    JWT: {
+      KEY: process.env.JWT_KEY,
+    },
+  },
+  server: {
+    PORT: process.env.PORT || 8080, // Valor por defecto si PORT no está definido
+  },
+};
